@@ -12,6 +12,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.PrePersist;
+import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -81,6 +83,34 @@ public class Lancamento implements Serializable {
 	@ManyToOne(fetch = FetchType.EAGER)
 	public Funcionario getFuncionario() {
 		return funcionario;
+	}
+
+	@PreUpdate
+	public void preUpdate() {
+		dataAtualizacao = new Date();
+	}
+
+	@PrePersist
+	public void prePersist() {
+		final Date atual = new Date();
+		dataCriacao = atual;
+		dataAtualizacao = atual;
+	}
+
+	@Override
+	public String toString() {
+		StringBuilder builder = new StringBuilder("Lancamento [");
+		builder.append("id = ").append(id);
+		builder.append(", data = ").append(data);
+		builder.append(", descricao = ").append(descricao);
+		builder.append(", localizacao = ").append(localizacao);
+		builder.append(", dataCriacao = ").append(dataCriacao);
+		builder.append(", dataAtualizacao = ").append(dataAtualizacao);
+		builder.append(", tipo = ").append(tipo);
+		builder.append(", funcionario = ").append(funcionario);
+		builder.append("]");
+
+		return builder.toString();
 	}
 
 	public void setId(Long id) {
